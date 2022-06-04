@@ -9,11 +9,14 @@ class Reddit:
         top_posts = self.reddit.subreddit(subreddit).top(time_filter=time_filter, limit=limit)
         return [post for post in top_posts]
     
-    def get_top_comments(self, post):
+    def get_top_comments(self, post, limit=5):
         submission = self.reddit.submission(id=post.id)
-        return [comment for comment in submission.comments if not isinstance(comment, MoreComments)]
+        submission.comment_limit = limit
+        submission.comments.replace_more(limit=0)
+        return [comment for comment in submission.comments]
 
-
+    def get_comment_replies(self, comment):
+        return comment.replies
 
         # hot_posts = self.reddit.subreddit(subreddit).hot(limit=limit)
 
