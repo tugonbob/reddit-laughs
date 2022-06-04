@@ -1,14 +1,25 @@
 import praw
 from praw.models import MoreComments
 
-reddit = praw.Reddit(client_id='z-5lJ-uWbatBGHSKW3NqiQ', client_secret='lhQnk7SNnS2EdlQz8bXnQe8uCqw6Eg', user_agent='YtLaughs')
+class Reddit:
+    def __init__(self):
+        self.reddit = praw.Reddit(client_id='z-5lJ-uWbatBGHSKW3NqiQ', client_secret='lhQnk7SNnS2EdlQz8bXnQe8uCqw6Eg', user_agent='YtLaughs')
 
-hot_posts = reddit.subreddit('AskReddit').hot(limit=1)
+    def get_top_posts(self, subreddit, time_filter, limit=10):
+        top_posts = self.reddit.subreddit(subreddit).top(time_filter=time_filter, limit=limit)
+        return [post for post in top_posts]
+    
+    def get_top_comments(self, post):
+        submission = self.reddit.submission(id=post.id)
+        return [comment for comment in submission.comments if not isinstance(comment, MoreComments)]
 
-for posts in hot_posts:
-    print(posts.title)
-    submission = reddit.submission(id=posts.id)
-    for comment in submission.comments:
-        if isinstance(comment, MoreComments):
-            continue
-        print(comment.body)
+
+
+        # hot_posts = self.reddit.subreddit(subreddit).hot(limit=limit)
+
+        # for posts in hot_posts:
+        #     submission = reddit.submission(id=posts.id)
+        #     for comment in submission.comments:
+        #         if isinstance(comment, MoreComments):
+        #             continue
+        #         print(comment.body)
