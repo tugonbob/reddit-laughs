@@ -16,7 +16,6 @@ class Reddit:
                 result.append(post)
             if duration_sum > total_duration:
                 break
-        print(duration_sum)
         return result
     
     def get_top_comments(self, post, limit=5):
@@ -24,13 +23,3 @@ class Reddit:
         submission.comment_limit = limit
         submission.comments.replace_more(limit=0)
         return [comment for comment in submission.comments]
-
-
-        # hot_posts = self.reddit.subreddit(subreddit).hot(limit=limit)
-
-        # for posts in hot_posts:
-        #     submission = reddit.submission(id=posts.id)
-        #     for comment in submission.comments:
-        #         if isinstance(comment, MoreComments):
-        #             continue
-        #         print(comment.body)
