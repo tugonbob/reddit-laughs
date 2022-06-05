@@ -1,5 +1,4 @@
 praw
 pick
-shutil
 redvid
 moviepy

@@ -16,23 +16,22 @@ def create_vid():
     for filename in os.listdir('./DownloadedRedditVids'):
         if filename.endswith(".mp4"):
             clip = VideoFileClip(f'./DownloadedRedditVids/{filename}')
-            clip = clip.resize(width=1920)
+            # clip = clip.resize(width=1920)
             clip = clip.resize(height=1080)
             vids.append(clip)
 
     final = concatenate_videoclips(vids, method='compose').set_pos("center")
 
-    # logo = (ImageClip("./Assets/logo.png", )
-    #     .set_duration(final.duration)
-    #     .resize(0.5)
-    #     .set_pos(("right", "top")))
+    logo = (ImageClip("./Assets/logo.png", )
+        .set_duration(final.duration)
+        .set_pos(("right", "top")))
 
     youtubeButtons = (ImageClip("./Assets/youtubeButtons.png")
         .set_duration(final.duration)
-        # .resize(0.5)
+        .resize(0.3)
         .set_pos(("left", "top")))
 
-    final = CompositeVideoClip([youtubeButtons, final ])
+    final = CompositeVideoClip([youtubeButtons, logo, final], size=(1920, 1080))
 
     final.write_videofile('final.mp4')
 
