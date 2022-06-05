@@ -16,28 +16,32 @@ def create_vid():
     for filename in os.listdir('./DownloadedRedditVids'):
         if filename.endswith(".mp4"):
             clip = VideoFileClip(f'./DownloadedRedditVids/{filename}')
-            # clip = clip.resize(width=1920)
-            clip = clip.resize(height=1080)
+            clip = clip.resize(height=720)
             vids.append(clip)
 
     final = concatenate_videoclips(vids, method='compose').set_pos("center")
 
-    logo = (ImageClip("./Assets/logo.png", )
+    logo = (ImageClip("./Assets/MemeMachine.png", )
         .set_duration(final.duration)
+        .resize(height=200)
         .set_pos(("right", "top")))
+
+    likeAndSubscribe = (VideoFileClip('./Assets/youtubeButtons_animation.mp4')
+        .set_pos(("center", "bottom")))
+    likeAndSubscribe = likeAndSubscribe.fx(vfx.mask_color, color=[0, 255, 1], thr=100, s=5)
 
     youtubeButtons = (ImageClip("./Assets/youtubeButtons.png")
         .set_duration(final.duration)
-        .resize(0.3)
+        .resize(height=200)
         .set_pos(("left", "top")))
 
-    final = CompositeVideoClip([youtubeButtons, logo, final], size=(1920, 1080))
+    final = CompositeVideoClip([logo, youtubeButtons, final, likeAndSubscribe], size=(1280, 720))
 
-    final.write_videofile('final.mp4')
+    final.write_videofile('final.mp4', threads=4, fps=24)
 
     
 
-posts = reddit.get_top_vid_posts("dankvideos", 'week', max_vid_length=30, total_duration=30)
+posts = reddit.get_top_vid_posts("dankvideos", 'day', max_vid_length=30, desired_duration=600)
 for post in posts:
     redvid.url = post.url
     redvid.download()
