@@ -1,4 +1,5 @@
 import praw
+from redvid import Downloader
 
 class Reddit:
     def __init__(self):
@@ -23,3 +24,10 @@ class Reddit:
         submission.comment_limit = limit
         submission.comments.replace_more(limit=0)
         return [comment for comment in submission.comments]
+
+    def download_vids(self, posts):
+        redvid = Downloader(max_q=True) # init redvid's reddit video downloader
+        redvid.path = './ScrapedVids/'  # set downloaded videos dir
+        for post in posts:
+            redvid.url = post.url
+            redvid.download()
