@@ -31,7 +31,9 @@ def create_vid():
     
 def scrape_reddit():
     reddit = redditApi.Reddit()     # init custom reddit api
-    posts = reddit.get_top_vid_posts("dankvideos", 'day', max_vid_length=30, desired_duration=600)
+    posts = reddit.get_top_vid_posts("dankvideos", "day", max_vid_length=30, desired_duration=300)
+    reddit.download_vids(posts)
+    posts = reddit.get_top_vid_posts("MemeVideos", "day", max_vid_length=30, desired_duration=300)
     reddit.download_vids(posts)
 
 if __name__ == '__main__':
