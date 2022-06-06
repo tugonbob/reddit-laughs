@@ -33,7 +33,7 @@ def create_vid():
     
 def scrape_reddit():
     reddit = redditApi.Reddit()     # init custom reddit api
-    posts = reddit.get_top_vid_posts("funnyvideos", "week", max_vid_length=61, desired_duration=600)
+    posts = reddit.get_top_vid_posts("funnyvideos", "week", max_vid_length=31, desired_duration=600)
     reddit.download_vids(posts)
 
 if __name__ == '__main__':
