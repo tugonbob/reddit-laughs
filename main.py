@@ -18,22 +18,18 @@ def create_vid():
 
     redditVids = concatenate_videoclips(vids, method='chain').set_pos("center")
 
-    background = (ImageClip("./Assets/MemeMachine.png")
-        .set_duration(redditVids.duration)
-        .resize((1280, 720)))
-
     likeAndSubscribe = (VideoFileClip('./Assets/youtubeButtons_animation.mp4')
         .set_pos(("center", "bottom")))
     likeAndSubscribe = likeAndSubscribe.fx(vfx.mask_color, color=[0, 255, 1], thr=100, s=5)
 
-    final = CompositeVideoClip([background, redditVids, likeAndSubscribe], size=(1280, 720))
+    final = CompositeVideoClip([redditVids, likeAndSubscribe], size=(1280, 720))
 
     final.write_videofile('final.mp4', threads=8, fps=24)
 
     
 def scrape_reddit():
     reddit = redditApi.Reddit()     # init custom reddit api
-    posts = reddit.get_top_vid_posts("funnyvideos", "week", max_vid_length=31, desired_duration=600)
+    posts = reddit.get_top_vid_posts("perfectlycutscreams", "week", desired_duration=600)
     reddit.download_vids(posts)
 
 if __name__ == '__main__':
