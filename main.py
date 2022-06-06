@@ -16,7 +16,7 @@ def create_vid():
             vids.append(clip)
     random.shuffle(vids)
 
-    redditVids = concatenate_videoclips(vids, method='compose').set_pos("center")
+    redditVids = concatenate_videoclips(vids, method='chain').set_pos("center")
 
     background = (ImageClip("./Assets/MemeMachine.png")
         .set_duration(redditVids.duration)
@@ -33,9 +33,7 @@ def create_vid():
     
 def scrape_reddit():
     reddit = redditApi.Reddit()     # init custom reddit api
-    posts = reddit.get_top_vid_posts("dankvideos", "day", max_vid_length=30, desired_duration=300)
-    reddit.download_vids(posts)
-    posts = reddit.get_top_vid_posts("MemeVideos", "day", max_vid_length=30, desired_duration=300)
+    posts = reddit.get_top_vid_posts("funnyvideos", "week", max_vid_length=61, desired_duration=600)
     reddit.download_vids(posts)
 
 if __name__ == '__main__':
