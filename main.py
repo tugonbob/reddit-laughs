@@ -1,4 +1,5 @@
 import os
+import random
 import shutil
 import redditApi
 from moviepy.editor import *
@@ -13,6 +14,7 @@ def create_vid():
             clip = VideoFileClip(f'./ScrapedVids/{filename}')
             clip = clip.resize(height=720)
             vids.append(clip)
+    random.shuffle(vids)
 
     redditVids = concatenate_videoclips(vids, method='compose').set_pos("center")
 
