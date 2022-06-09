@@ -1,12 +1,15 @@
 import os
 import random
+import argparse
 import shutil
 import redditApi
 from moviepy.editor import *
+import pandas as pd
 
-shutil.rmtree('./ScrapedVids/', ignore_errors=True)
 
 def create_vid():
+    if args.verbose: print("Rendering the final video")
+
     # get path of all vids
     vids = []
     for filename in os.listdir('./ScrapedVids'):
@@ -29,10 +32,25 @@ def create_vid():
     
 def scrape_reddit():
     reddit = redditApi.Reddit()     # init custom reddit api
-    posts = reddit.get_top_vid_posts("perfectlycutscreams", "week", desired_duration=600)
-    reddit.download_vids(posts)
+    for index, row in df.iterrows():
+        try:
+            if args.verbose: print(f"Scraping {row['DesiredDuration']} seconds of videos from r/{row['Subreddit']} that is the top of the last {row['TimeFilter']}")
+            posts = reddit.get_top_vid_posts(row['Subreddit'], row['TimeFilter'], desired_duration=row['DesiredDuration'])
+            reddit.download_vids(posts)
+        except Exception as e:
+            raise Exception(e)
 
-if __name__ == '__main__':
-    shutil.rmtree('./ScrapedVids/', ignore_errors=True)
-    scrape_reddit()
-    create_vid()
+
+# main
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--verbose", default=False, action='store_true', help="Verbose mode")
+args = parser.parse_args()
+
+if args.verbose: print("Reading from 'SelectedSubreddits.csv'")
+df = pd.read_csv('SelectedSubreddits.csv')
+
+if args.verbose: print("Deleting the 'ScrapedVids' directory")
+shutil.rmtree('./ScrapedVids/', ignore_errors=True)
+
+scrape_reddit()
+create_vid()

@@ -5,7 +5,7 @@ class Reddit:
     def __init__(self):
         self.reddit = praw.Reddit(client_id='z-5lJ-uWbatBGHSKW3NqiQ', client_secret='lhQnk7SNnS2EdlQz8bXnQe8uCqw6Eg', user_agent='YtLaughs')
 
-    def get_top_vid_posts(self, subreddit, time_filter,limit=None, desired_duration=600, max_vid_length=9999999999, min_vid_length=0, min_upvote_ratio= 0.9):
+    def get_top_vid_posts(self, subreddit, time_filter,limit=None, desired_duration=300, max_vid_length=9999999999, min_vid_length=0, min_upvote_ratio=0.9):
         top_posts = self.reddit.subreddit(subreddit).top(time_filter=time_filter, limit=limit)
         result = []
         duration_sum = 0
@@ -18,12 +18,7 @@ class Reddit:
             if duration_sum > desired_duration:
                 break
         return result
-    
-    def get_top_comments(self, post, limit=5):
-        submission = self.reddit.submission(id=post.id)
-        submission.comment_limit = limit
-        submission.comments.replace_more(limit=0)
-        return [comment for comment in submission.comments]
+
 
     def download_vids(self, posts):
         redvid = Downloader(max_q=True) # init redvid's reddit video downloader
